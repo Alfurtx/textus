@@ -53,3 +53,15 @@ ShaderUseProgram(Shader handle)
 {
 	glUseProgram(handle);
 }
+
+void
+ShaderSetUniformVec2(Shader handle, const char* name, vec2 vec)
+{
+	glUniform2f(glGetUniformLocation(handle, name), vec.x, vec.y);
+}
+
+void
+ShaderSetUniformVec4(Shader handle, const char* name, vec4 vec)
+{
+	glUniform4f(glGetUniformLocation(handle, name), vec.x, vec.y, vec.z, vec.w);
+}

@@ -1,0 +1,14 @@
+prefix=/home/fonsi/proyectos/textus/dependencies/freetype/release
+exec_prefix=/home/fonsi/proyectos/textus/dependencies/freetype/release
+libdir=/home/fonsi/proyectos/textus/dependencies/freetype/release/lib
+includedir=/home/fonsi/proyectos/textus/dependencies/freetype/release/include
+
+Name: FreeType 2
+URL: https://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 25.0.19
+Requires: 
+Requires.private: zlib, bzip2, libpng, harfbuzz >= 2.0.0, libbrotlidec
+Libs: -L/home/fonsi/proyectos/textus/dependencies/freetype/release/lib -lfreetype
+Libs.private: 
+Cflags: -I${includedir}/freetype2

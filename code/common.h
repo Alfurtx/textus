@@ -5,12 +5,21 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
+
+#ifdef _WIN32
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
 
 typedef int8_t       int8;
 typedef int16_t      int16;
