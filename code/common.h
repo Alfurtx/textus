@@ -29,7 +29,7 @@ typedef size_t       usize;
 #include <assert.h>
 #undef assert
 #define assert(E, M) (void)((E) || (_assert(#E, __FILE__, __LINE__, M),0))
-void
+static inline void
 _assert(const char* expr, const char* filename, const int line, char* message)
 {
     if(!message) {
@@ -45,6 +45,5 @@ _assert(const char* expr, const char* filename, const int line, char* message)
         printf("%s:%d: UNIMPLEMENTED: %s \n", __FILE__, __LINE__, __VA_ARGS__); \
         exit(1);                                                                \
     } while(0)
-
 
 #endif

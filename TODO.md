@@ -4,6 +4,7 @@
 
 - [x] Crear ventana
 - [x] Crear arena
+- [ ] Añadir custom math lib (algebra lineal)
 - [ ] Idear sistema de render extensible
 - [ ] Mostrar texto
 - [ ] Abrir archivos (aun no mostrarlos en pantalla)

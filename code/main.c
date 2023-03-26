@@ -1,6 +1,3 @@
-#define ARENA_IMPLEMENTATION
-#include "arena.h"
-
 #include "common.h"
 
 const uint WINDOW_W = 1920;
