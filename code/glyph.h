@@ -2,6 +2,7 @@
 #define GLYPH_H
 
 #include "common.h"
+#include "renderer.h"
 
 #define GLYPH_INFO_CAPACITY 128
 
@@ -20,5 +21,6 @@ typedef struct GlyphAtlas {
 } GlyphAtlas;
 
 void GlyphAtlasInit(GlyphAtlas* atlas, FT_Face face);
+void GlyphAtlasRenderLine(GlyphAtlas* atlas, Renderer* r, const char* text, usize textsize, vec2* pos, vec4 color);
 
 #endif

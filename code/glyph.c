@@ -73,3 +73,34 @@ GlyphAtlasInit(GlyphAtlas* atlas, FT_Face face)
         x += face->glyph->bitmap.width;
 	}
 }
+
+void
+GlyphAtlasRenderLine(GlyphAtlas* atlas,
+					 Renderer* r,
+					 const char* text,
+					 usize textsize,
+					 vec2* pos, vec4 color)
+{
+	for(usize i = 0; i < textsize; i++) {
+		usize gi = text[i];
+		if(gi >= GLYPH_INFO_CAPACITY) {
+			gi = '?';
+		}
+		GlyphInfo m = atlas->glyphs[gi];
+		float x2 = pos->x + m.bl;
+		float y2 = -pos->y + m.bt;
+		float w = m.bw;
+		float h = m.bh;
+
+		pos->x += m.ax;
+		pos->y += m.ay;
+
+		RendererImageRect(r,
+						  Vec2Init(x2, -y2),
+						  Vec2Init(w, -h),
+						  Vec2Init(m.tx, 0.0f),
+						  Vec2Init(m.bw / (float) atlas->atlas_width,
+								   m.bh / (float) atlas->atlas_height),
+						  color);
+	}
+}

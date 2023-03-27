@@ -2,8 +2,8 @@
 #define FILE_H
 
 #include "common.h"
-#include "arena.h"
 
-char* ReadFile(Arena* arena, const char* filepath);
+// NOTE(fonsi): YOU have to free the given pointer later
+char* ReadFile(const char* filepath);
 
 #endif

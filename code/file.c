@@ -10,13 +10,14 @@ GetFileSize(FILE* f)
 }
 
 char*
-ReadFile(Arena* arena, const char* filepath)
+ReadFile(const char* filepath)
 {
 	FILE* f = fopen(filepath, "rb");
 	assert(f, "Couldn't open file");
 	usize fsize = GetFileSize(f);
-	char* buf = ArenaPush(arena, fsize);
+	char* buf = malloc(fsize + 1);
 	fread(buf, 1, fsize, f);
+	assert(buf != NULL, "ReadFile alloc FAILED");
 	buf[fsize] = '\0';
 	fclose(f);
 

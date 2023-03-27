@@ -14,12 +14,18 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 #ifdef _WIN32
 #else
 #include <unistd.h>
 #define GetCurrentDir getcwd
 #endif
+
+#define KB(v) (1024LL * v)
+#define MB(v) (1024LL * KB(v))
+#define GB(v) (1024LL * MB(v))
+#define TB(v) (1024LL * GB(v))
 
 typedef int8_t       int8;
 typedef int16_t      int16;
