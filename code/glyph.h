@@ -4,23 +4,23 @@
 #include "common.h"
 #include "renderer.h"
 
-#define GLYPH_INFO_CAPACITY 128
+#define CHARACTERINFO_CAP 128
 
 typedef struct {
 	float ax, ay;
 	float bw, bh;
 	float bl, bt;
 	float tx;
-} GlyphInfo;
+} CharacterInfo;
 
 typedef struct GlyphAtlas {
-	FT_UInt atlas_width;
-	FT_UInt atlas_height;
-	GLuint glyphs_texture;
-	GlyphInfo glyphs[GLYPH_INFO_CAPACITY];
-} GlyphAtlas;
+	uint atlas_width;
+	uint atlas_height;
+	uint texture_id;
+	CharacterInfo characters[CHARACTERINFO_CAP];
+} CharacterAtlas;
 
-void GlyphAtlasInit(GlyphAtlas* atlas, FT_Face face);
-void GlyphAtlasRenderLine(GlyphAtlas* atlas, Renderer* r, const char* text, usize textsize, vec2* pos, vec4 color);
+void character_atlas_init(CharacterAtlas* atlas, FT_Face face);
+void character_atlas_render_line(CharacterAtlas* atlas, Renderer* r, const char* text, usize textsize, vec2* pos, vec4 color);
 
 #endif

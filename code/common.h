@@ -39,6 +39,7 @@ typedef unsigned int uint;
 typedef size_t       usize;
 
 #define internal static
+#define ARRAY_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
 
 #define NDEBUG
 #include <assert.h>

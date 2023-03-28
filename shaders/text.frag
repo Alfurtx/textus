@@ -1,10 +1,13 @@
 #version 330 core
 
-uniform sampler2D image;
-
 in vec4 out_color;
 in vec2 out_uv;
+out vec4 color;
+
+uniform sampler2D text;
 
 void main() {
-    gl_FragColor = texture(image, out_uv).x*out_color;
+  vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, out_uv).r);
+  color = out_color * sampled;
+  // color = texture(image, out_uv).r*out_color;
 }
