@@ -1,7 +1,7 @@
 #include "arena.h"
 
 Region*
-RegionNew(usize size)
+region_new(usize size)
 {
     Region* r = calloc(1, sizeof(Region));
     assert(r, "Region alloc FAILED");
@@ -14,7 +14,7 @@ RegionNew(usize size)
 }
 
 void
-RegionRelease(Region* region)
+region_release(Region* region)
 {
     assert(region, "Trying to free NULL pointer");
     assert(region->base, "Trying to free NULL pointer");
@@ -24,26 +24,26 @@ RegionRelease(Region* region)
 }
 
 void
-ArenaRelease(Arena* arena)
+arena_release(Arena* arena)
 {
     Region* r = arena->begin;
     while(r) {
         Region* region = r;
         r              = r->next;
-        RegionRelease(region);
+        region_release(region);
     }
     arena->begin = NULL;
     arena->end   = NULL;
 }
 
 void*
-ArenaPush(Arena* arena, usize size)
+arena_push(Arena* arena, usize size)
 {
     if(arena->end != NULL) {
         assert(arena->begin != NULL, "");
         usize cap =
             REGION_DEFAULT_CAPACITY < size ? size : REGION_DEFAULT_CAPACITY;
-        arena->end   = RegionNew(cap);
+        arena->end   = region_new(cap);
         arena->begin = arena->end;
     }
 
@@ -55,7 +55,7 @@ ArenaPush(Arena* arena, usize size)
         assert(arena->end->next == NULL, "");
         usize cap =
             REGION_DEFAULT_CAPACITY < size ? size : REGION_DEFAULT_CAPACITY;
-        arena->end->next = RegionNew(cap);
+        arena->end->next = region_new(cap);
         arena->end       = arena->end->next;
     }
 
@@ -65,7 +65,7 @@ ArenaPush(Arena* arena, usize size)
 }
 
 void
-ArenaClear(Arena* arena)
+arena_clear(Arena* arena)
 {
     Region* r = arena->begin;
     while(r) {
@@ -76,7 +76,7 @@ ArenaClear(Arena* arena)
 }
 
 ArenaLocal
-ArenaGetScratch(Arena* arena)
+arena_get_scratch(Arena* arena)
 {
     return (ArenaLocal){
         .arena  = arena,
@@ -92,13 +92,13 @@ RecursiveRegionRelease(Region* r)
         return;
     RecursiveRegionRelease(r->next);
     if(r->next == NULL) {
-        RegionRelease(r);
+        region_release(r);
         r = NULL;
     }
 }
 
 void
-ArenaReleaseScratch(ArenaLocal* local)
+arena_release_scratch(ArenaLocal* local)
 {
     local->arena->end       = local->region;
     local->arena->end->used = local->pos;

@@ -107,3 +107,26 @@ character_atlas_render_line(CharacterAtlas* atlas,
 								 color);
 	}
 }
+
+vec2
+get_cursor_pos_and_width(CharacterAtlas* atlas, const char* text, usize tsize, vec2 pos, usize col)
+{
+	vec2 result = {0};
+	result = pos;
+
+	for(uint i = 0; i < tsize; i++) {
+		if(i == col) {
+			uint ci = text[i];
+			if(ci >= CHARACTERINFO_CAP) ci = '?';
+			CharacterInfo m = atlas->characters[ci];
+			result.y = m.ax;
+			return result;
+		}
+		uint ci = text[i];
+		if(ci >= CHARACTERINFO_CAP) ci = '?';
+		CharacterInfo m = atlas->characters[ci];
+		result.x += m.ax;
+		result.y = m.ax;
+	}
+	return result;
+}

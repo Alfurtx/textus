@@ -1,7 +1,7 @@
 #include "file.h"
 
-static usize
-GetFileSize(FILE* f)
+static inline usize
+get_file_size(FILE* f)
 {
 	fseek(f, 0, SEEK_END);
 	usize size = ftell(f);
@@ -9,17 +9,42 @@ GetFileSize(FILE* f)
 	return size;
 }
 
+void
+read_file(const char* filepath, Buffer* buffer)
+{
+	FILE* f = fopen(filepath, "r");
+	assert(f, "Couldn't open file");
+	usize fsize = get_file_size(f);
+
+	if(buffer->capacity < fsize) {
+		buffer->capacity = fsize;
+		buffer->items = realloc(buffer->items, buffer->capacity * sizeof(char));
+		assert(buffer->items != NULL, "Realloc FAILED");
+	}
+
+	fread(buffer->items, fsize, 1, f);
+	fclose(f);
+
+	buffer->count = fsize;
+	buffer->items[fsize] = '\0';
+}
+
 char*
-ReadFile(const char* filepath)
+read_file_old(const char* filepath)
 {
 	FILE* f = fopen(filepath, "rb");
 	assert(f, "Couldn't open file");
-	usize fsize = GetFileSize(f);
-	char* buf = malloc(fsize + 1);
-	fread(buf, 1, fsize, f);
-	assert(buf != NULL, "ReadFile alloc FAILED");
-	buf[fsize] = '\0';
+	usize fsize = get_file_size(f);
+
+	char* b;
+
+	b = malloc(fsize);
+
+	assert(b, "Malloc FAILED");
+
+	fread(b, fsize, 1, f);
 	fclose(f);
 
-	return buf;
+	b[fsize] = '\0';
+	return b;
 }

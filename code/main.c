@@ -1,6 +1,7 @@
 #include "common.h"
 #include "glyph.h"
 #include "renderer.h"
+#include "editor.h"
 
 const uint WINDOW_W = 1920;
 const uint WINDOW_H = 1080;
@@ -10,6 +11,9 @@ static char        current_dir[FILENAME_MAX];
 
 static CharacterAtlas atlas    = {0};
 static Renderer   renderer = {0};
+static EditorState editor = {0};
+
+Arena permanent_arena;
 
 void MessageCallback(GLenum        source,
                      GLenum        type,
@@ -19,6 +23,7 @@ void MessageCallback(GLenum        source,
                      const GLchar* message,
                      const void*   userParam);
 void ResizeCallback(GLFWwindow* win, int w, int h);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 int
 main(void)
@@ -37,6 +42,7 @@ main(void)
 
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSetFramebufferSizeCallback(window, ResizeCallback);
+	glfwSetKeyCallback(window, key_callback);
     glfwSwapInterval(1);
 
     if(GLAD_GL_ARB_debug_output) {
@@ -64,10 +70,13 @@ main(void)
         return 1;
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Set_Pixel_Sizes(face, 0, FONT_SIZE);
 
     character_atlas_init(&atlas, face);
     renderer_init(&renderer);
+	editor_init(&editor, &permanent_arena, &atlas);
+
+	editor_load_file(&editor, "");
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -76,24 +85,13 @@ main(void)
         if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, 1);
 
-        renderer.resolution = Vec2Init(1920, 1080);
-        renderer.time       = glfwGetTime();
-
-        vec2 pos = Vec2Init(0.0f, 0.0f);
-        renderer_set_shader(&renderer, SHADER_TEXT);
-        character_atlas_render_line(&atlas,
-                             &renderer,
-                             "HOLA MUNDO",
-                             10 * sizeof(char),
-                             &pos,
-                             Vec4Init(1.0f, 1.0f, 1.0f, 1.0f));
-
-        renderer_flush(&renderer);
+		editor_render(&editor, &renderer, window);
 
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
 
+	arena_release(&permanent_arena);
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
     glfwTerminate();
@@ -125,4 +123,13 @@ void
 ResizeCallback(GLFWwindow* win, int w, int h)
 {
     glViewport(0, 0, w, h);
+}
+
+void
+key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if(key == GLFW_KEY_H && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		editor_move_cursor_left(&editor);
+	if(key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		editor_move_cursor_right(&editor);
 }

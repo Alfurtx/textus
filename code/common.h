@@ -27,19 +27,25 @@
 #define GB(v) (1024LL * MB(v))
 #define TB(v) (1024LL * GB(v))
 
-typedef int8_t       int8;
-typedef int16_t      int16;
-typedef int32_t      int32;
-typedef int64_t      int64;
-typedef uint8_t      uint8;
-typedef uint16_t     uint16;
-typedef uint32_t     uint32;
-typedef uint64_t     uint64;
+typedef int8_t       i8;
+typedef int16_t      i16;
+typedef int32_t      i32;
+typedef int64_t      i64;
+typedef uint8_t      u8;
+typedef uint16_t     u16;
+typedef uint32_t     u32;
+typedef uint64_t     u64;
 typedef unsigned int uint;
 typedef size_t       usize;
 
 #define internal static
 #define ARRAY_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
+
+typedef struct {
+	usize capacity;
+	usize count;
+	char* items;
+} Buffer;
 
 #define NDEBUG
 #include <assert.h>

@@ -1,8 +1,4 @@
 ## Lista de cosas que hacer
 
 NEXT DAY =>
-Completar renderer. Hacer que puedas dibujar cuadrados, vertices, triangulos, ...
-
-DONE
-
-_Completly copied from tsoding/ded simplerenderer but really liked it_
+Get a cursor appear and be able to add/remove chars from text on screen

@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-// NOTE(fonsi): YOU have to free the given pointer later
-char* ReadFile(const char* filepath);
+void read_file(const char* filepath, Buffer* buffer);
+char* read_file_old(const char* filepath); // DEPRECATED
 
 #endif

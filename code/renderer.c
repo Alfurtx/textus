@@ -12,12 +12,11 @@ const char* fragment_filepaths[SHADER_COUNT] = {
 static inline void
 shader_compile_file(const char* filepath, GLenum shader_type, GLuint* shader)
 {
-    char* file;
-    file = ReadFile(filepath);
-
+	Buffer file = {0};
+    read_file(filepath, &file);
 	{
 		*shader = glCreateShader(shader_type);
-		glShaderSource(*shader, 1, &file, NULL);
+		glShaderSource(*shader, 1, &file.items, NULL);
 		glCompileShader(*shader);
 
 		GLint compiled = 0;
@@ -35,7 +34,8 @@ shader_compile_file(const char* filepath, GLenum shader_type, GLuint* shader)
 		}
 
 	}
-    free(file);
+	assert(file.items != NULL, "file.items IS NULL");
+    free(file.items);
 }
 
 static inline void

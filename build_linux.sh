@@ -24,4 +24,4 @@ echo -e "[$(cat compile_commands.json)]" > compile_commands.json
 mv compile_commands.json ..
 popd > /dev/null
 
-./bin/textus.exe
+${CWD}/bin/textus.exe

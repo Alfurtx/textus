@@ -11,9 +11,9 @@ typedef struct ArenaLocal ArenaLocal;
 
 struct Region {
 	Region* next;
-	usize   total;
-	usize   used;
-	void*   base;
+	usize total;
+	usize used;
+	u8* base;
 };
 
 struct Arena {
@@ -27,12 +27,12 @@ struct ArenaLocal {
 	usize pos;
 };
 
-Region* RegionNew(usize size);
-void RegionRelease(Region* region);
-ArenaLocal ArenaGetScratch(Arena* arena);
-void ArenaReleaseScratch(ArenaLocal* local);
-void* ArenaPush(Arena* arena, usize size);
-void ArenaRelease(Arena* arena);
-void ArenaClear(Arena* arena);
+Region* region_new(usize size);
+void region_release(Region* region);
+ArenaLocal arena_get_scratch(Arena* arena);
+void arena_release_scratch(ArenaLocal* local);
+void* arena_push(Arena* arena, usize size);
+void arena_release(Arena* arena);
+void arena_clear(Arena* arena);
 
 #endif // ARENA_H
