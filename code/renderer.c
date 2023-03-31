@@ -14,6 +14,7 @@ shader_compile_file(const char* filepath, GLenum shader_type, GLuint* shader)
 {
 	Buffer file = {0};
     read_file(filepath, &file);
+	file.items[file.count] = '\0';
 	{
 		*shader = glCreateShader(shader_type);
 		glShaderSource(*shader, 1, &file.items, NULL);

@@ -16,6 +16,8 @@
 #include <stdarg.h>
 #include <stddef.h>
 
+#include "config.h"
+
 #ifdef _WIN32
 #else
 #include <unistd.h>
@@ -40,12 +42,46 @@ typedef size_t       usize;
 
 #define internal static
 #define ARRAY_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
+#define DEFAULT_CAPACITY 256
 
 typedef struct {
 	usize capacity;
 	usize count;
 	char* items;
 } Buffer;
+
+#define arr_append(arr, item)											\
+	do {																\
+		if((arr)->count >= (arr)->capacity) {							\
+			(arr)->capacity = (arr)->capacity == 0 ? DEFAULT_CAPACITY : (arr)->capacity * 2; \
+			(arr)->items = realloc((arr)->items, (arr)->capacity * sizeof(*(arr)->items)); \
+			assert((arr)->items, "Realloc failed");						\
+	}																	\
+		(arr)->items[(arr)->count++] = (item);							\
+	} while(0)
+
+#define arr_append_many(arr, mitem, mcount)								\
+	do {																\
+		if((arr)->count + mcount > (arr)->capacity) {					\
+			if((arr)->capacity == 0)	{								\
+				(arr)->capacity = DEFAULT_CAPACITY;						\
+			}															\
+			while((arr)->count + mcount >= (arr)->capacity) {			\
+				(arr)->capacity *= 2;									\
+			}															\
+			(arr)->items = realloc((arr)->items, (arr)->capacity * sizeof(*(arr)->items)); \
+			assert((arr)->items, "Realloc FAILED");						\
+		}																\
+		memcpy((arr)->items + (arr)->count, mitem, mcount * sizeof(*(arr)->items)); \
+		(arr)->count += mcount;											\
+	} while(0)
+#define arr_append_cstr(sb, cstr) \
+    do {                          \
+        const char *s = (cstr);   \
+        size_t n = strlen(s);     \
+        arr_append_many(sb, s, n); \
+    } while (0)
+#define arr_append_null(sb) arr_append_many(sb, "", 1)
 
 #define NDEBUG
 #include <assert.h>

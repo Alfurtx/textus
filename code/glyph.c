@@ -1,7 +1,7 @@
 #include "glyph.h"
 
 void
-character_atlas_init(CharacterAtlas* atlas, FT_Face face)
+char_atlas_init(CharacterAtlas* atlas, FT_Face face)
 {
 	for(uint i = 32; i < 128; i++) {
 		if(FT_Load_Char(face, i, FT_LOAD_RENDER)) {
@@ -43,12 +43,15 @@ character_atlas_init(CharacterAtlas* atlas, FT_Face face)
             exit(1);
         }
 
-        if (FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL)) {
-            fprintf(stderr,
-					"ERROR: could not render glyph of a character with code %d\n",
-					i);
-            exit(1);
-        }
+		// NOTE(fonsi): FreeType says that FT_Load_Char with FT_LOAD_RENDER
+		// should be able to substitute this
+		//
+        // if (FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL)) {
+        //     fprintf(stderr,
+		// 			"ERROR: could not render glyph of a character with code %d\n",
+		// 			i);
+        //     exit(1);
+        // }
 
 		atlas->characters[i].ax = face->glyph->advance.x >> 6;
         atlas->characters[i].ay = face->glyph->advance.y >> 6;
@@ -72,7 +75,7 @@ character_atlas_init(CharacterAtlas* atlas, FT_Face face)
 }
 
 void
-character_atlas_render_line(CharacterAtlas* atlas,
+char_atlas_render_line(CharacterAtlas* atlas,
 							Renderer* r,
 							const char* text,
 							usize textsize,
@@ -108,25 +111,16 @@ character_atlas_render_line(CharacterAtlas* atlas,
 	}
 }
 
-vec2
-get_cursor_pos_and_width(CharacterAtlas* atlas, const char* text, usize tsize, vec2 pos, usize col)
+float
+char_atlas_cursor_pos(CharacterAtlas* atlas, const char* text, usize size, usize col)
 {
-	vec2 result = {0};
-	result = pos;
-
-	for(uint i = 0; i < tsize; i++) {
-		if(i == col) {
-			uint ci = text[i];
-			if(ci >= CHARACTERINFO_CAP) ci = '?';
-			CharacterInfo m = atlas->characters[ci];
-			result.y = m.ax;
-			return result;
-		}
-		uint ci = text[i];
+	float xpos = 0.0f;
+	for(usize i = 0; i < size; i++) {
+		if(i == col) return xpos;
+		usize ci = text[i];
 		if(ci >= CHARACTERINFO_CAP) ci = '?';
 		CharacterInfo m = atlas->characters[ci];
-		result.x += m.ax;
-		result.y = m.ax;
+		xpos += m.ax;
 	}
-	return result;
+	return xpos;
 }

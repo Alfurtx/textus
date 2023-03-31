@@ -26,7 +26,7 @@ read_file(const char* filepath, Buffer* buffer)
 	fclose(f);
 
 	buffer->count = fsize;
-	buffer->items[fsize] = '\0';
+	// buffer->items[fsize] = '\0';
 }
 
 char*

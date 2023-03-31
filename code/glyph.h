@@ -23,8 +23,9 @@ typedef struct GlyphAtlas {
 	CharacterInfo characters[CHARACTERINFO_CAP];
 } CharacterAtlas;
 
-void character_atlas_init(CharacterAtlas* atlas, FT_Face face);
-void character_atlas_render_line(CharacterAtlas* atlas, Renderer* r, const char* text, usize textsize, vec2* pos, vec4 color);
-vec2 get_cursor_pos_and_width(CharacterAtlas* atlas, const char* text, usize tsize, vec2 pos, usize col);
+void char_atlas_init(CharacterAtlas* atlas, FT_Face face);
+void char_atlas_render_line(CharacterAtlas* atlas, Renderer* r, const char* text, usize textsize, vec2* pos, vec4 color);
+
+float char_atlas_cursor_pos(CharacterAtlas* atlas, const char* text, usize size, usize col);
 
 #endif
