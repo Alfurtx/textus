@@ -47,7 +47,6 @@ void editor_render(EditorState* e, Renderer* renderer);
 void editor_load_file(EditorState* e, const char* filepath);
 void editor_rebuild_lines(EditorState* e);
 usize editor_get_cursor_row(EditorState* e);
-vec2 editor_cursor_pos(EditorState* e);
 
 void editor_move_cursor_right(EditorState* e);
 void editor_move_cursor_left(EditorState* e);

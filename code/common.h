@@ -43,6 +43,8 @@ typedef size_t       usize;
 #define internal static
 #define ARRAY_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
 #define DEFAULT_CAPACITY 256
+#define FPS 60.0f
+#define DELTA_TIME (1.0f / FPS)
 
 typedef struct {
 	usize capacity;

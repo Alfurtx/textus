@@ -38,6 +38,7 @@ typedef struct {
 	Vertex verticies[VERTICES_CAPACITY];
 	usize verticies_count;
 
+	vec2 camera_pos;
 	vec2 resolution;
 	float time;
 } Renderer;

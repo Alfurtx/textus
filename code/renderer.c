@@ -214,13 +214,8 @@ renderer_set_shader(Renderer* renderer, Shader shader)
 		renderer->uniforms[u] = glGetUniformLocation(renderer->programs[renderer->current_shader], uniform_pairs[u].name);
 	}
 
-    glUniform2f(renderer->uniforms[UNIFORM_RESOLUTION],
-                renderer->resolution.x,
-                renderer->resolution.y);
+    glUniform2f(renderer->uniforms[UNIFORM_RESOLUTION], renderer->resolution.x, renderer->resolution.y);
     glUniform1f(renderer->uniforms[UNIFORM_TIME], renderer->time);
-    // glUniform2f(renderer->uniforms[UNIFORM_CAMERA_POS],
-    //             renderer->camera_pos.x,
-    //             renderer->camera_pos.y);
-    // glUniform1f(renderer->uniforms[UNIFORM_CAMERA_SCALE],
-    //             renderer->camera_scale);
+    glUniform2f(renderer->uniforms[UNIFORM_CAMERA_POS], renderer->camera_pos.x, renderer->camera_pos.y);
+    // glUniform1f(renderer->uniforms[UNIFORM_CAMERA_SCALE], renderer->camera_scale);
 }

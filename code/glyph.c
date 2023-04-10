@@ -114,3 +114,18 @@ char_atlas_cursor_pos(CharacterAtlas* atlas, const char* text, usize size, usize
 	}
 	return xpos;
 }
+
+float
+char_atlas_cursor_width(CharacterAtlas* atlas, const char* text, usize size, usize col)
+{
+	float result = 0.0f;
+
+	for(usize i = 0; i < size; i++) {
+		usize ci = text[i];
+		if(ci >= CHARACTERINFO_CAP) ci = '?';
+		result = atlas->characters[ci].ax;
+		if(i == col) break;
+	}
+
+	return(result);
+}

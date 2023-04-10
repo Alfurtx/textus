@@ -2,7 +2,7 @@
 
 uniform vec2 resolution;
 uniform float time;
-uniform float camera_scale;
+// uniform float camera_scale;
 uniform vec2 camera_pos;
 
 layout(location = 0) in vec2 position;
@@ -32,14 +32,21 @@ mat4 ortho_project()
 vec2
 camera_project(vec2 point)
 {
-	return 2.0 * (point - camera_pos) * camera_scale / resolution;
+  float camera_scale = 1.0f;
+  // return 2.0 * (point - camera_pos) * camera_scale / resolution;
+  // return 2.0 * (point - camera_pos) * camera_scale / resolution;
+  vec2 result = 2.0 * (point - camera_pos) / resolution;
+  // result.x -= resolution.x;
+  // result.y -= resolution.y;
+  return result;
 }
+
 
 void
 main()
 {
-  // gl_Position = vec4(camera_project(position), 0, 1);
-  gl_Position = ortho_project() * vec4(position.xy, 0.0, 1.0);
+  gl_Position = vec4(camera_project(position), 0, 1);
+  // gl_Position = ortho_project() * vec4(position.xy, 0.0, 1.0);
   out_color = color;
   out_uv = uv;
 }

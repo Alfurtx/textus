@@ -21,7 +21,6 @@ void char_callback(GLFWwindow* window, uint codepoint);
 int
 main(void)
 {
-
 	/* GLFW Initializing */
 	{
 		glfwInit();
@@ -49,6 +48,7 @@ main(void)
 		} else {
 			fprintf(stderr, "WARNING: GLAD_GL_ARB_debug_output is not available");
 		}
+
 	}
 
 

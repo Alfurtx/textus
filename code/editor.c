@@ -22,22 +22,35 @@ editor_get_cursor_row(EditorState* e)
 void
 editor_render(EditorState* e, Renderer* renderer)
 {
-	// window info
+	/* Window Info */
 	int w, h;
 	glfwGetWindowSize(e->window, &w, &h);
 
-	// update cursor info
-	vec2 cursor_pos = editor_cursor_pos(e);
-	usize cursor_width = e->atlas->characters['A'].ax;
+	renderer->resolution = vec2_init(w, h);
+	renderer->time = glfwGetTime();
 
-	// render cursor
+	/* Cursor Update */
+	vec2 cursor_pos = vec2_init_s(0.0f);
+	float cursor_width = 0.0f;
+	{
+		usize crow = editor_get_cursor_row(e);
+		Line l = e->lines.items[crow];
+		usize ccol = e->cursor - l.begin;
+		char* text = e->data.items + l.begin;
+		cursor_pos.y = h - (crow + 1 + CURSOR_OFFSET) * FONT_SIZE;
+		cursor_pos.x = char_atlas_cursor_pos(e->atlas, text, l.end - l.begin, ccol);
+		cursor_width = char_atlas_cursor_width(e->atlas, text, l.end - l.begin, ccol);
+		if(cursor_width == 0.0f) cursor_width = e->atlas->characters['A'].ax;
+	}
+
+	/* Cursor Render */
 	{
 		renderer_set_shader(renderer, SHADER_COLOR);
 		renderer_push_rect(renderer, cursor_pos, vec2_init(cursor_width, FONT_SIZE), vec4_init(.0f, 1.0f, .0f, 1.0f));
 		renderer_flush(renderer);
 	}
 
-	// render text
+	/* Text Render */
 	{
 		renderer_set_shader(renderer, SHADER_TEXT);
 		for(usize i = 0; i < e->lines.count; i++) {
@@ -51,6 +64,14 @@ editor_render(EditorState* e, Renderer* renderer)
 								   vec4_init_s(1.0f));
 		}
 		renderer_flush(renderer);
+	}
+
+	/* Camera Update */
+	{
+		vec2 target = cursor_pos;
+		vec2 camvel = vec2_mul(vec2_sub(target, renderer->camera_pos), vec2_init_s(2.0));
+		renderer->camera_pos = vec2_add(renderer->camera_pos, vec2_mul(camvel, vec2_init_s(DELTA_TIME)));
+		// renderer->camera_pos = cursor_pos;
 	}
 }
 
@@ -167,23 +188,6 @@ editor_save_file(EditorState* e)
 	assert(f, "Failed to detect file to write");
 	fwrite(e->data.items, 1, e->data.count, f);
 	fclose(f);
-}
-
-vec2
-editor_cursor_pos(EditorState* e)
-{
-	int w, h; glfwGetWindowSize(e->window, &w, &h);
-	vec2 result = {0};
-
-	usize crow = editor_get_cursor_row(e);
-	Line line = e->lines.items[crow];
-	usize ccol = e->cursor - line.begin;
-	result.y = h - (crow + 1 + CURSOR_OFFSET) * FONT_SIZE;
-	result.x = char_atlas_cursor_pos(e->atlas,
-									 e->data.items + line.begin,
-									 line.end - line.begin,
-									 ccol);
-	return(result);
 }
 
 void
