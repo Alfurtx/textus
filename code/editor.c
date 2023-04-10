@@ -1,9 +1,8 @@
 #include "editor.h"
 
 void
-editor_init(EditorState* e, Arena* arena, CharacterAtlas* atlas, GLFWwindow* w)
+editor_init(EditorState* e, CharacterAtlas* atlas, GLFWwindow* w)
 {
-	e->arena = arena;
 	e->atlas = atlas;
 	e->window = w;
 }
@@ -34,25 +33,22 @@ editor_render(EditorState* e, Renderer* renderer)
 	// render cursor
 	{
 		renderer_set_shader(renderer, SHADER_COLOR);
-		renderer_push_rect(renderer, cursor_pos, Vec2Init(cursor_width, FONT_SIZE), Vec4Init(.0f, 1.0f, .0f, 1.0f));
+		renderer_push_rect(renderer, cursor_pos, vec2_init(cursor_width, FONT_SIZE), vec4_init(.0f, 1.0f, .0f, 1.0f));
 		renderer_flush(renderer);
 	}
 
 	// render text
 	{
 		renderer_set_shader(renderer, SHADER_TEXT);
-		usize lc = e->linebot - e->linetop + 1;
-		for(usize i = 0; i < lc; i++) {
-			usize lcount = e->lines.items[e->linetop + i].end -
-				           e->lines.items[e->linetop + i].begin;
-			vec2 tpos = Vec2Init(.0f, h - ((i + 1) * FONT_SIZE));
-			Line lpos = e->lines.items[e->linetop + i];
+		for(usize i = 0; i < e->lines.count; i++) {
+			vec2 tpos = vec2_init(.0f, h - ((i + 1) * FONT_SIZE));
+			Line lpos = e->lines.items[i];
 			char_atlas_render_line(e->atlas,
 								   renderer,
 								   &e->data.items[lpos.begin],
-								   lcount,
+								   lpos.end-lpos.begin,
 								   &tpos,
-								   Vec4Inits(1.0f));
+								   vec4_init_s(1.0f));
 		}
 		renderer_flush(renderer);
 	}
@@ -64,7 +60,6 @@ editor_load_file(EditorState* e, const char* filepath)
 	e->data.count = 0;
 	read_file(filepath, &e->data);
 	e->cursor = 0;
-	e->scroll = 0;
 	editor_rebuild_lines(e);
 
 	e->filepath.count = 0;
@@ -72,8 +67,6 @@ editor_load_file(EditorState* e, const char* filepath)
 	arr_append_null(&e->filepath);
 
 	int w, h; glfwGetWindowSize(e->window, &w, &h);
-	e->linetop = 0;
-	e->linebot = h / FONT_SIZE - 1;
 
 	return;
 }
@@ -99,9 +92,6 @@ void
 editor_move_cursor_right(EditorState* e)
 {
 	if(e->cursor < e->data.count) {
-		if(e->data.items[e->cursor + 1] == '\n')
-			e->cursor += 2;
-		else
 			e->cursor += 1;
 	}
 }
@@ -110,9 +100,6 @@ void
 editor_move_cursor_left(EditorState* e)
 {
 	if(e->cursor > 0) {
-		if(e->data.items[e->cursor - 1] == '\n')
-			e->cursor -= 2;
-		else
 			e->cursor -= 1;
 	}
 }
@@ -129,12 +116,6 @@ editor_move_cursor_up(EditorState* e)
 			e->cursor = nextline.begin + diff;
 		else
 			e->cursor = nextline.end;
-
-		if(crow - 1 < e->linetop) {
-			e->scroll -= 1;
-			if(e->linetop > 0) e->linetop--;
-			if(e->linebot < e->lines.count) e->linebot--;
-		}
 	}
 }
 
@@ -151,13 +132,6 @@ editor_move_cursor_down(EditorState* e)
 		else
 			e->cursor = nextline.end;
 
-		if(crow + 1 > e->linebot) {
-			e->scroll += 1;
-			if(e->linebot < e->lines.count - 1) {
-				e->linebot++;
-			}
-			e->linetop++;
-		}
 	}
 }
 
@@ -204,10 +178,24 @@ editor_cursor_pos(EditorState* e)
 	usize crow = editor_get_cursor_row(e);
 	Line line = e->lines.items[crow];
 	usize ccol = e->cursor - line.begin;
-	result.y = h - (crow + 1 + CURSOR_OFFSET - e->scroll) * FONT_SIZE;
+	result.y = h - (crow + 1 + CURSOR_OFFSET) * FONT_SIZE;
 	result.x = char_atlas_cursor_pos(e->atlas,
 									 e->data.items + line.begin,
 									 line.end - line.begin,
 									 ccol);
 	return(result);
+}
+
+void
+editor_backspace(EditorState* e)
+{
+	if(e->cursor > e->data.count) e->cursor = e->data.count;
+	if(e->cursor == 0) return;
+
+	memmove(&e->data.items[e->cursor - 1],
+			&e->data.items[e->cursor],
+			e->data.count - e->cursor);
+	e->cursor -= 1;
+	e->data.count -= 1;
+	editor_rebuild_lines(e);
 }

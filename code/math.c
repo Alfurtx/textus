@@ -1,80 +1,80 @@
 #include "math.h"
 
 vec2
-Vec2Init(float x, float y)
+vec2_init(float x, float y)
 {
 	return (vec2) { .x = x, .y = y };
 }
 
 vec2
-Vec2Inits(float x)
+vec2_init_s(float x)
 {
 	return (vec2) { .x = x, .y = x };
 }
 
 vec2
-Vec2Add(vec2 a, vec2 b)
+vec2_add(vec2 a, vec2 b)
 {
 	return (vec2) { .x = a.x + b.x, .y = a.y + b.y };
 }
 
 vec2
-Vec2Sub(vec2 a, vec2 b)
+vec2_sub(vec2 a, vec2 b)
 {
 	return (vec2) { .x = a.x - b.x, .y = a.y - b.y };
 }
 
 vec2
-Vec2Mul(vec2 a, vec2 b)
+vec2_mul(vec2 a, vec2 b)
 {
 	return (vec2) { .x = a.x * b.x, .y = a.y * b.y };
 }
 
 vec2
-Vec2Div(vec2 a, vec2 b)
+vec2_div(vec2 a, vec2 b)
 {
 	return (vec2) { .x = a.x / b.x, .y = a.y / b.y };
 }
 
 vec2
-Vec2Mul3(vec2 a, vec2 b, vec2 c)
+vec2_mul3(vec2 a, vec2 b, vec2 c)
 {
-	return Vec2Mul(Vec2Mul(a, b), c);
+	return vec2_mul(vec2_mul(a, b), c);
 }
 
 
 vec4
-Vec4Init(float x, float y, float z, float w)
+vec4_init(float x, float y, float z, float w)
 {
 	return (vec4) { .x = x, .y = y, .z = z, .w = w };
 }
 
 vec4
-Vec4Inits(float x)
+vec4_init_s(float x)
 {
 	return (vec4) { .x = x, .y = x, .z = x, .w = x };
 }
 
 vec4
-Vec4Add(vec4 a, vec4 b)
+vec4_add(vec4 a, vec4 b)
 {
-	return Vec4Init(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+	return vec4_init(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
 vec4
-Vec4Sub(vec4 a, vec4 b)
+vec4_sub(vec4 a, vec4 b)
 {
-	return Vec4Init(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+	return vec4_init(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 vec4
-Vec4Mul(vec4 a, vec4 b)
+vec4_mul(vec4 a, vec4 b)
 {
-	return Vec4Init(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+	return vec4_init(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
 
 vec4
-Vec4Div(vec4 a, vec4 b)
+vec4_div(vec4 a, vec4 b)
 {
-	return Vec4Init(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+	return vec4_init(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
 }

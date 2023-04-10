@@ -168,7 +168,7 @@ renderer_push_rect(Renderer* renderer, vec2 p, vec2 s, vec4 c)
 {
     vec2 uv = {0};
     renderer_push_quad(renderer,
-					   p, Vec2Add(p, Vec2Init(s.x, 0)), Vec2Add(p, Vec2Init(0, s.y)), Vec2Add(p, s),
+					   p, vec2_add(p, vec2_init(s.x, 0)), vec2_add(p, vec2_init(0, s.y)), vec2_add(p, s),
 					   c,c,c,c,
 					   uv,uv,uv,uv);
 }
@@ -177,9 +177,9 @@ void
 renderer_push_image_rect(Renderer* renderer, vec2 p, vec2 s, vec2 uvp, vec2 uvs, vec4 c)
 {
     renderer_push_quad(renderer,
-                 p, Vec2Add(p, Vec2Init(s.x, 0)), Vec2Add(p, Vec2Init(0, s.y)), Vec2Add(p, s),
+                 p, vec2_add(p, vec2_init(s.x, 0)), vec2_add(p, vec2_init(0, s.y)), vec2_add(p, s),
                  c, c, c, c,
-                 uvp, Vec2Add(uvp, Vec2Init(uvs.x, 0)), Vec2Add(uvp, Vec2Init(0, uvs.y)), Vec2Add(uvp, uvs));
+                 uvp, vec2_add(uvp, vec2_init(uvs.x, 0)), vec2_add(uvp, vec2_init(0, uvs.y)), vec2_add(uvp, uvs));
 }
 
 void

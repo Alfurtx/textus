@@ -1,39 +1,41 @@
-ARESET
-RESET
-TESAT
-TEST^
-TEST´
-AAAATEST_#
-ATEST@-+/*!?|&=
-TAEAST $% ! &/(())= \
+Hola Mundo, este es un texto directo de
+Textus.
+Espero que tengais un maravilloso dia,
+seais felices,
+no murais,
+hagais los deberes y
+estudieis mucho.
+
 1
-2AA
-3A
-4A
-5
-6
-7
-8
-9A
-0
+1
+1
+1
 11
-A12
-13
-14
-15
-16
-17
-18
-19
-10
-21
-22
-23
-24
-25
-26
-27
-28
-29
-20
-31
+1
+1
+1
+1
+1
+1
+1
+1
+SuperCalifragilisticoespialidoso
+1
+1
+1
+1
+1
+
+1
+1
+1
+1
+
+1
+1
+1
+1
+
+1
+
+== FIN ==

@@ -43,16 +43,6 @@ char_atlas_init(CharacterAtlas* atlas, FT_Face face)
             exit(1);
         }
 
-		// NOTE(fonsi): FreeType says that FT_Load_Char with FT_LOAD_RENDER
-		// should be able to substitute this
-		//
-        // if (FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL)) {
-        //     fprintf(stderr,
-		// 			"ERROR: could not render glyph of a character with code %d\n",
-		// 			i);
-        //     exit(1);
-        // }
-
 		atlas->characters[i].ax = face->glyph->advance.x >> 6;
         atlas->characters[i].ay = face->glyph->advance.y >> 6;
         atlas->characters[i].bw = face->glyph->bitmap.width;
@@ -76,10 +66,10 @@ char_atlas_init(CharacterAtlas* atlas, FT_Face face)
 
 void
 char_atlas_render_line(CharacterAtlas* atlas,
-							Renderer* r,
-							const char* text,
-							usize textsize,
-							vec2* pos, vec4 color)
+					   Renderer* r,
+					   const char* text,
+					   usize textsize,
+					   vec2* pos, vec4 color)
 {
 	for(usize i = 0; i < textsize; i++) {
 		usize char_index = text[i];
@@ -102,10 +92,10 @@ char_atlas_render_line(CharacterAtlas* atlas,
 		// x2 -= m.bl;
 
 		renderer_push_image_rect(r,
-								 Vec2Init(x2, y2),
-								 Vec2Init(w, -h),
-								 Vec2Init(m.tx, 0.0f),
-								 Vec2Init(m.bw / (float) atlas->atlas_width,
+								 vec2_init(x2, y2),
+								 vec2_init(w, -h),
+								 vec2_init(m.tx, 0.0f),
+								 vec2_init(m.bw / (float) atlas->atlas_width,
 										  m.bh / (float) atlas->atlas_height),
 								 color);
 	}
