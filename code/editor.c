@@ -10,7 +10,7 @@ editor_init(EditorState* e, CharacterAtlas* atlas, GLFWwindow* w)
 usize
 editor_get_cursor_row(EditorState* e)
 {
-	assert(e->lines.count > 0, "");
+	Assert(e->lines.count > 0, "");
 	for(usize i = 0; i < e->lines.count; i++) {
 		Line line = e->lines.items[i];
 		if(e->cursor >= line.begin && e->cursor <= line.end)
@@ -166,7 +166,7 @@ editor_insert_char(EditorState* e, char c)
 		// TODO(fonsi): take into account empty files
 		e->data.capacity *= 2;
 		e->data.items = realloc(e->data.items, e->data.capacity * sizeof(*e->data.items));
-		assert(e->data.items, "Realloc FAILED");
+		Assert(e->data.items, "Realloc FAILED");
 	}
 
 	arr_append(&e->data, '\0');
@@ -185,7 +185,7 @@ editor_save_file(EditorState* e)
 {
 	FILE* f = 0;
 	f = fopen(e->filepath.items, "wb");
-	assert(f, "Failed to detect file to write");
+	Assert(f, "Failed to detect file to write");
 	fwrite(e->data.items, 1, e->data.count, f);
 	fclose(f);
 }

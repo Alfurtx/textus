@@ -56,7 +56,7 @@ main(void)
     FT_Library ft;
     FT_Face face;
     char fontdir[FILENAME_MAX];
-    GetCurrentDir(current_dir, FILENAME_MAX);
+    get_current_dir(current_dir, FILENAME_MAX);
 	{
 		strcpy(fontdir, current_dir);
 		strcat(fontdir, "/fonts/liberation.ttf");

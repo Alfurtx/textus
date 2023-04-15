@@ -18,10 +18,14 @@
 
 #include "config.h"
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifdef _WIN32
+#include <windows.h>
+#define get_current_dir(a, b) GetCurrentDirectory(b, a)
 #else
 #include <unistd.h>
-#define GetCurrentDir getcwd
+#define get_current_dir getcwd
 #endif
 
 #define KB(v) (1024LL * v)
@@ -57,7 +61,7 @@ typedef struct {
 		if((arr)->count >= (arr)->capacity) {							\
 			(arr)->capacity = (arr)->capacity == 0 ? DEFAULT_CAPACITY : (arr)->capacity * 2; \
 			(arr)->items = realloc((arr)->items, (arr)->capacity * sizeof(*(arr)->items)); \
-			assert((arr)->items, "Realloc failed");						\
+			Assert((arr)->items, "Realloc failed");						\
 	}																	\
 		(arr)->items[(arr)->count++] = (item);							\
 	} while(0)
@@ -72,7 +76,7 @@ typedef struct {
 				(arr)->capacity *= 2;									\
 			}															\
 			(arr)->items = realloc((arr)->items, (arr)->capacity * sizeof(*(arr)->items)); \
-			assert((arr)->items, "Realloc FAILED");						\
+			Assert((arr)->items, "Realloc FAILED");						\
 		}																\
 		memcpy((arr)->items + (arr)->count, mitem, mcount * sizeof(*(arr)->items)); \
 		(arr)->count += mcount;											\
@@ -85,12 +89,10 @@ typedef struct {
     } while (0)
 #define arr_append_null(sb) arr_append_many(sb, "", 1)
 
-#define NDEBUG
 #include <assert.h>
-#undef assert
-#define assert(E, M) (void)((E) || (_assert(#E, __FILE__, __LINE__, M),0))
+#define Assert(E, M) (void)((E) || (myAssert(#E, __FILE__, __LINE__, M),0))
 static inline void
-_assert(const char* expr, const char* filename, const int line, char* message)
+myAssert(const char* expr, const char* filename, const int line, char* message)
 {
     if(!message) {
         fprintf(stderr, "[ERROR][%s:%d] %s\n", filename, line, expr);

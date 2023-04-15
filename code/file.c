@@ -13,13 +13,13 @@ void
 read_file(const char* filepath, Buffer* buffer)
 {
 	FILE* f = fopen(filepath, "r");
-	assert(f, "Couldn't open file");
+	Assert(f, "Couldn't open file");
 	usize fsize = get_file_size(f);
 
 	if(buffer->capacity < fsize) {
 		buffer->capacity = fsize;
 		buffer->items = realloc(buffer->items, buffer->capacity * sizeof(char));
-		assert(buffer->items != NULL, "Realloc FAILED");
+		Assert(buffer->items != NULL, "Realloc FAILED");
 	}
 
 	fread(buffer->items, fsize, 1, f);
@@ -33,14 +33,14 @@ char*
 read_file_old(const char* filepath)
 {
 	FILE* f = fopen(filepath, "rb");
-	assert(f, "Couldn't open file");
+	Assert(f, "Couldn't open file");
 	usize fsize = get_file_size(f);
 
 	char* b;
 
 	b = malloc(fsize);
 
-	assert(b, "Malloc FAILED");
+	Assert(b, "Malloc FAILED");
 
 	fread(b, fsize, 1, f);
 	fclose(f);

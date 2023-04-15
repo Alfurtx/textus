@@ -4,7 +4,7 @@ Region*
 region_new(usize size)
 {
     Region* r = calloc(1, sizeof(Region));
-    assert(r, "Region alloc FAILED");
+    Assert(r, "Region alloc FAILED");
     r->base  = calloc(1, size);
     r->total = size;
     r->used  = 0;
@@ -16,8 +16,8 @@ region_new(usize size)
 void
 region_release(Region* region)
 {
-    assert(region, "Trying to free NULL pointer");
-    assert(region->base, "Trying to free NULL pointer");
+    Assert(region, "Trying to free NULL pointer");
+    Assert(region->base, "Trying to free NULL pointer");
     free(region->base);
     free(region);
     region = NULL;
@@ -40,7 +40,7 @@ void*
 arena_push(Arena* arena, usize size)
 {
     if(arena->end != NULL) {
-        assert(arena->begin != NULL, "");
+        Assert(arena->begin != NULL, "");
         usize cap =
             REGION_DEFAULT_CAPACITY < size ? size : REGION_DEFAULT_CAPACITY;
         arena->end   = region_new(cap);
@@ -52,7 +52,7 @@ arena_push(Arena* arena, usize size)
         arena->end = arena->end->next;
 
     if(arena->end->used + size > arena->end->total) {
-        assert(arena->end->next == NULL, "");
+        Assert(arena->end->next == NULL, "");
         usize cap =
             REGION_DEFAULT_CAPACITY < size ? size : REGION_DEFAULT_CAPACITY;
         arena->end->next = region_new(cap);

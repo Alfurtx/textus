@@ -35,7 +35,7 @@ shader_compile_file(const char* filepath, GLenum shader_type, GLuint* shader)
 		}
 
 	}
-	assert(file.items != NULL, "file.items IS NULL");
+	Assert(file.items != NULL, "file.items IS NULL");
     free(file.items);
 }
 
